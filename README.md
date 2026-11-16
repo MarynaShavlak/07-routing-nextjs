@@ -6,6 +6,8 @@ Router) з розширеною маршрутизацією: сторінка N
 перехоплення маршрутів. Дані зберігаються на бекенді
 [NoteHub API](https://notehub-public.goit.study/api/docs).
 
+**Демо:** https://07-routing-nextjs-neon-zeta.vercel.app
+
 ## Маршрути
 
 - `/` — головна сторінка із загальною інформацією про NoteHub
