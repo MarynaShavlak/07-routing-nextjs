@@ -1,0 +1,5 @@
+/* takes the free space between header and footer, so the footer stays at the bottom
+   while a page, its loading state or its error state is shown */
+.content {
+  flex: 1;
+}
