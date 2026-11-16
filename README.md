@@ -93,9 +93,7 @@ components/
 ├── SearchBox/
 └── TanStackProvider/
 lib/
-├── api/
-│   ├── api.ts
-│   └── notes.ts
+├── api.ts
 ├── constants.ts
 └── utils.ts
 types/
