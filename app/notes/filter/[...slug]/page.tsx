@@ -5,35 +5,23 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api/notes';
-import { ALL_NOTES_FILTER, NOTE_TAGS } from '@/lib/constants';
-import type { NoteTag } from '@/types/note';
+import { ALL_NOTES_FILTER } from '@/lib/constants';
+import { getTagFromSlug } from '@/lib/utils';
 import NotesClient from './Notes.client';
 
 interface FilteredNotesProps {
   params: Promise<{ slug: string[] }>;
 }
 
-const isNoteTag = (value: string): value is NoteTag =>
-  NOTE_TAGS.includes(value as NoteTag);
-
-// "all" is not a tag on the backend, so it maps to a request without a tag
-const getTagFromSlug = (slug: string[]): NoteTag | undefined => {
-  const [filter] = slug;
-
-  if (slug.length === 1 && filter === ALL_NOTES_FILTER) {
-    return undefined;
-  }
-
-  if (slug.length === 1 && isNoteTag(filter)) {
-    return filter;
-  }
-
-  notFound();
-};
-
 export default async function FilteredNotes({ params }: FilteredNotesProps) {
   const { slug } = await params;
   const tag = getTagFromSlug(slug);
+
+  // unknown tags are already answered with 404 in proxy.ts, this keeps the page safe on its own
+  if (tag === null) {
+    notFound();
+  }
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
