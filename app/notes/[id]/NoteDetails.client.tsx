@@ -1,18 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api/notes';
+import { formatDate } from '@/lib/utils';
 import css from './NoteDetails.module.css';
-
-// a fixed time zone keeps the server and client markup identical during hydration
-const formatDate = (date: string): string =>
-  new Date(date).toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
 
 export default function NoteDetailsClient() {
   const { id } = useParams<{ id: string }>();
@@ -38,6 +31,9 @@ export default function NoteDetailsClient() {
   return (
     <div className={css.container}>
       <div className={css.item}>
+        <Link href="/notes/filter/all" className={css.backBtn}>
+          ← Back to notes
+        </Link>
         <div className={css.header}>
           <h2>{note.title}</h2>
         </div>
