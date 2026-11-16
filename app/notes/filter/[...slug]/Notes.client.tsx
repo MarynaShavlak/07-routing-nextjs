@@ -5,6 +5,8 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useDebouncedCallback } from 'use-debounce';
 import { Toaster } from 'react-hot-toast';
 import { fetchNotes } from '@/lib/api/notes';
+import { ALL_NOTES_FILTER } from '@/lib/constants';
+import type { NoteTag } from '@/types/note';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
@@ -16,18 +18,22 @@ import css from './NotesPage.module.css';
 
 const SEARCH_DEBOUNCE_DELAY = 300;
 
-export default function NotesClient() {
+interface NotesClientProps {
+  tag?: NoteTag;
+}
+
+export default function NotesClient({ tag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ['notes', currentPage, searchQuery],
-    queryFn: () => fetchNotes({ page: currentPage, search: searchQuery }),
+    queryKey: ['notes', tag ?? ALL_NOTES_FILTER, currentPage, searchQuery],
+    queryFn: () => fetchNotes({ page: currentPage, search: searchQuery, tag }),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
-    // a failed request is shown by the route error boundary (app/notes/error.tsx)
+    // a failed request is shown by the route error boundary (error.tsx)
     throwOnError: true,
   });
 
@@ -73,7 +79,9 @@ export default function NotesClient() {
           message={
             searchQuery
               ? `No notes found for "${searchQuery}".`
-              : 'You have no notes yet. Create your first one!'
+              : tag
+                ? `You have no notes with the "${tag}" tag yet.`
+                : 'You have no notes yet. Create your first one!'
           }
         />
       )}

@@ -8,3 +8,6 @@ export const NOTE_TAGS: NoteTag[] = [
   'Meeting',
   'Shopping',
 ];
+
+// the filter route segment that shows notes with any tag
+export const ALL_NOTES_FILTER = 'all';
