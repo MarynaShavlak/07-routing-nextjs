@@ -2,15 +2,14 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { createNote } from '@/lib/api';
-import type { NewNote, NoteTag } from '@/types/note';
+import { createNote } from '@/lib/api/notes';
+import { NOTE_TAGS } from '@/lib/constants';
+import type { NewNote } from '@/types/note';
 import css from './NoteForm.module.css';
 
 interface NoteFormProps {
   onClose: () => void;
 }
-
-const TAGS: NoteTag[] = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
 
 const initialValues: NewNote = {
   title: '',
@@ -24,7 +23,7 @@ const NoteFormSchema = Yup.object().shape({
     .max(50, 'Title must be at most 50 characters')
     .required('Title is required'),
   content: Yup.string().max(500, 'Content must be at most 500 characters'),
-  tag: Yup.string().oneOf(TAGS, 'Invalid tag').required('Tag is required'),
+  tag: Yup.string().oneOf(NOTE_TAGS, 'Invalid tag').required('Tag is required'),
 });
 
 export default function NoteForm({ onClose }: NoteFormProps) {
@@ -74,7 +73,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         <div className={css.formGroup}>
           <label htmlFor="tag">Tag</label>
           <Field as="select" id="tag" name="tag" className={css.select}>
-            {TAGS.map((tag) => (
+            {NOTE_TAGS.map((tag) => (
               <option key={tag} value={tag}>
                 {tag}
               </option>

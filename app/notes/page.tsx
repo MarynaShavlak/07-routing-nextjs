@@ -3,7 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { fetchNotes } from '@/lib/api';
+import { fetchNotes } from '@/lib/api/notes';
 import NotesClient from './Notes.client';
 
 // render the page on every request, so the prefetched list is always up to date
